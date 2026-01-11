@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { MenuCategoryWithItems } from 'src/generated-types/menu-category';
 import type { MenuCategory } from 'prisma/generated-types/client';
 import type { Language } from 'prisma/generated-types/enums';
+import { AppError } from 'src/errors/app-error';
 
 @Injectable()
 export class MenuCategoryService {
@@ -26,7 +27,7 @@ export class MenuCategoryService {
       return categories_with_items;
     } catch (error) {
       this.logger.error(`Error fetching full menu: ${error instanceof Error ? error.message : error}`);
-      throw error;
+      throw AppError.internalServerError('Failed to fetch full menu');
     }
   }
 
@@ -41,7 +42,25 @@ export class MenuCategoryService {
       return categories;
     } catch (error) {
       this.logger.error(`Error fetching menu categories: ${error instanceof Error ? error.message : error}`);
-      throw error;
+      throw AppError.internalServerError('Failed to fetch menu categories');
+    }
+  }
+
+  async getMenuCategoryById(id: string): Promise<MenuCategory | null> {
+    this.logger.log(`Fetching menu category by ID: ${id}`);
+    try {
+      const category = await this.prisma.menuCategory.findUnique({
+        where: { id },
+      });
+      if (category) {
+        this.logger.log(`Menu category found: ${category.title}`);
+      } else {
+        this.logger.log(`Menu category with ID ${id} not found`);
+      }
+      return category;
+    } catch (error) {
+      this.logger.error(`Error fetching menu category by ID: ${error instanceof Error ? error.message : error}`);
+      throw AppError.internalServerError('Failed to fetch menu category by ID');
     }
   }
 }

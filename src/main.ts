@@ -7,6 +7,7 @@ import { AppModule } from './app.module';
 import { MENU_ITEM_V1_PACKAGE_NAME } from './generated-types/menu-item';
 import { HEALTH_CHECK_V1_PACKAGE_NAME } from './generated-types/health-check';
 import { MENU_CATEGORY_V1_PACKAGE_NAME } from './generated-types/menu-category';
+import { GrpcExceptionFilter } from './errors/grpc-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +17,8 @@ async function bootstrap() {
   const PORT = configService.get<string>('TRANSPORT_PORT');
   const HOST = configService.get<string>('TRANSPORT_HOST');
   const URL = `${HOST}:${PORT}`;
+
+  app.useGlobalFilters(new GrpcExceptionFilter());
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
