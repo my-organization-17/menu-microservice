@@ -1,0 +1,47 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "./generated-types"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Language {
+  EN
+  UA
+  RU
+}
+
+model MenuCategory {
+  id          String     @id @default(uuid())
+  language    Language
+  title       String
+  description String?
+  position    Int
+  isAvailable Boolean    @default(true) @map("is_available")
+  imageUrl    String?    @map("image_url")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @default(now()) @updatedAt @map("updated_at")
+  menuItems   MenuItem[] @relation("CategoryToMenuItems")
+
+  @@map("menu_categories")
+}
+
+model MenuItem {
+  id          String       @id @default(uuid())
+  language    Language
+  title       String
+  description String?
+  price       String
+  position    Int
+  isAvailable Boolean      @default(true) @map("is_available")
+  imageUrl    String?      @map("image_url")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at")
+  categoryId  String       @map("category_id")
+  category    MenuCategory @relation("CategoryToMenuItems", fields: [categoryId], references: [id])
+
+  @@map("menu_items")
+}
