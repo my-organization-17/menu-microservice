@@ -2,9 +2,14 @@ import { Controller, Logger } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { MenuCategoryService } from './menu-category.service';
 import {
+  ChangeMenuCategoryPositionRequest,
+  CreateMenuCategoryRequest,
   MENU_CATEGORY_SERVICE_NAME,
+  MenuCategory,
   MenuCategoryList,
   MenuCategoryListWithItems,
+  StatusResponse,
+  UpdateMenuCategoryRequest,
 } from 'src/generated-types/menu-category';
 import type { Language } from 'prisma/generated-types/enums';
 
@@ -28,5 +33,42 @@ export class MenuCategoryController {
     const data = await this.menuCategoryService.getMenuCategoriesByLanguage(language);
     this.logger.log(`Returning ${data.length} categories for language: ${language}`);
     return { data };
+  }
+
+  @GrpcMethod(MENU_CATEGORY_SERVICE_NAME, 'GetMenuCategoryById')
+  async getMenuCategoryById({ id }: { id: string }) {
+    this.logger.log(`Received request for menu category with ID: ${id}`);
+    const data = await this.menuCategoryService.getMenuCategoryById(id);
+    if (data) {
+      this.logger.log(`Returning menu category with ID: ${id}`);
+      return data;
+    } else {
+      this.logger.log(`Menu category with ID: ${id} not found`);
+      return null;
+    }
+  }
+
+  @GrpcMethod(MENU_CATEGORY_SERVICE_NAME, 'CreateMenuCategory')
+  async createMenuCategory(data: CreateMenuCategoryRequest): Promise<MenuCategory> {
+    this.logger.log(`Received request to create menu category with title: ${data.title}`);
+    return this.menuCategoryService.createMenuCategory(data);
+  }
+
+  @GrpcMethod(MENU_CATEGORY_SERVICE_NAME, 'UpdateMenuCategory')
+  async updateMenuCategory(data: UpdateMenuCategoryRequest): Promise<MenuCategory> {
+    this.logger.log(`Received request to update menu category with ID: ${data.id}`);
+    return this.menuCategoryService.updateMenuCategory(data);
+  }
+
+  @GrpcMethod(MENU_CATEGORY_SERVICE_NAME, 'ChangeMenuCategoryPosition')
+  async changeMenuCategoryPosition(data: ChangeMenuCategoryPositionRequest): Promise<MenuCategory> {
+    this.logger.log(`Received request to change position of menu category with ID: ${data.id}`);
+    return this.menuCategoryService.changeMenuCategoryPosition(data);
+  }
+
+  @GrpcMethod(MENU_CATEGORY_SERVICE_NAME, 'DeleteMenuCategory')
+  async deleteMenuCategory({ id }: { id: string }): Promise<StatusResponse> {
+    this.logger.log(`Received request to delete menu category with ID: ${id}`);
+    return this.menuCategoryService.deleteMenuCategory(id);
   }
 }

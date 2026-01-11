@@ -1,5 +1,6 @@
-export enum AppErrorCode {
+export enum RpcErrorCode {
   UNPROCESSABLE_ENTITY = 1,
+  UNKNOWN = 2,
   BAD_REQUEST = 3,
   GATEWAY_TIMEOUT = 4,
   NOT_FOUND = 5,
@@ -7,10 +8,11 @@ export enum AppErrorCode {
   FORBIDDEN = 7,
   TOO_MANY_REQUESTS = 8,
   PRECONDITION_FAILED = 9,
-  REQUEST_TIMEOUT = 10,
+  ABORTED = 10,
   OUT_OF_RANGE = 11,
   NOT_IMPLEMENTED = 12,
   INTERNAL = 13,
   SERVICE_UNAVAILABLE = 14,
+  DATA_LOSS = 15,
   UNAUTHORIZED = 16,
 }
