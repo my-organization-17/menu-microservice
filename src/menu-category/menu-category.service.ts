@@ -30,10 +30,15 @@ export class MenuCategoryService {
           },
         },
       });
+      if (categories_with_items.length === 0) {
+        this.logger.warn(`No menu categories found for language: ${language}`);
+        throw AppError.notFound('No menu categories found for the specified language');
+      }
 
       return categories_with_items;
     } catch (error) {
       this.logger.error(`Error fetching full menu: ${error instanceof Error ? error.message : error}`);
+      if (error instanceof AppError) throw error;
       throw AppError.internalServerError('Failed to fetch full menu');
     }
   }

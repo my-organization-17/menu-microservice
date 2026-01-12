@@ -1,10 +1,11 @@
 import { Controller, Logger } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
+
+import { MENU_CATEGORY_SERVICE_NAME } from 'src/generated-types/menu-category';
 import { MenuCategoryService } from './menu-category.service';
-import {
+import type {
   ChangeMenuCategoryPositionRequest,
   CreateMenuCategoryRequest,
-  MENU_CATEGORY_SERVICE_NAME,
   MenuCategory,
   MenuCategoryList,
   MenuCategoryListWithItems,
@@ -16,7 +17,6 @@ import type { Language } from 'prisma/generated-types/enums';
 @Controller()
 export class MenuCategoryController {
   constructor(private readonly menuCategoryService: MenuCategoryService) {}
-
   protected readonly logger = new Logger(MenuCategoryController.name);
 
   @GrpcMethod(MENU_CATEGORY_SERVICE_NAME, 'GetFullMenuByLanguage')
