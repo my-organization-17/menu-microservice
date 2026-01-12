@@ -7,16 +7,14 @@ import { AppModule } from './app.module';
 import { MENU_ITEM_V1_PACKAGE_NAME } from './generated-types/menu-item';
 import { HEALTH_CHECK_V1_PACKAGE_NAME } from './generated-types/health-check';
 import { MENU_CATEGORY_V1_PACKAGE_NAME } from './generated-types/menu-category';
-import { GrpcExceptionFilter } from './errors/grpc-exception.filter';
+import { GrpcExceptionFilter } from './utils/filters/grpc-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const logger = new Logger('main.ts');
+  const logger = new Logger('Main');
   const configService = app.get(ConfigService);
-  const PORT = configService.get<string>('TRANSPORT_PORT');
-  const HOST = configService.get<string>('TRANSPORT_HOST');
-  const URL = `${HOST}:${PORT}`;
+  const url = configService.getOrThrow<string>('TRANSPORT_URL');
 
   app.useGlobalFilters(new GrpcExceptionFilter());
 
@@ -25,11 +23,11 @@ async function bootstrap() {
     options: {
       package: [MENU_CATEGORY_V1_PACKAGE_NAME, MENU_ITEM_V1_PACKAGE_NAME, HEALTH_CHECK_V1_PACKAGE_NAME],
       protoPath: ['proto/menu-category.proto', 'proto/menu-item.proto', 'proto/health-check.proto'],
-      url: URL,
+      url,
     },
   });
   await app.startAllMicroservices();
   await app.init();
-  logger.log('Menu microservice is running on ' + URL);
+  logger.log('Menu microservice is running on ' + url);
 }
 void bootstrap();

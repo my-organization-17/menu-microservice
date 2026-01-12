@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AppError } from 'src/errors/app-error';
+import { AppError } from 'src/utils/errors/app-error';
 
 import type {
   ChangeMenuCategoryPositionRequest,

@@ -4,14 +4,15 @@ import { ConfigModule } from '@nestjs/config';
 import { HealthCheckModule } from './health-check/health-check.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { MenuCategoryModule } from './menu-category/menu-category.module';
-import { envValidate } from './errors/env-validator';
+import { validateEnv } from './utils/validators/env-validator';
+import { EnvironmentVariables } from './utils/env.dto';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env.local'],
-      validate: envValidate,
+      validate: (config) => validateEnv(config, EnvironmentVariables),
     }),
     HealthCheckModule,
     PrismaModule,
