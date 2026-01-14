@@ -26,6 +26,7 @@ async function bootstrap() {
       url,
     },
   });
+
   await app.startAllMicroservices();
   await app.init();
   logger.log('Menu microservice is running on ' + url);

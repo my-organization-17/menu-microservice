@@ -39,13 +39,8 @@ export class MenuCategoryController {
   async getMenuCategoryById({ id }: { id: string }) {
     this.logger.log(`Received request for menu category with ID: ${id}`);
     const data = await this.menuCategoryService.getMenuCategoryById(id);
-    if (data) {
-      this.logger.log(`Returning menu category with ID: ${id}`);
-      return data;
-    } else {
-      this.logger.log(`Menu category with ID: ${id} not found`);
-      return null;
-    }
+    this.logger.log(`Returning menu category with ID: ${id}`);
+    return data;
   }
 
   @GrpcMethod(MENU_CATEGORY_SERVICE_NAME, 'CreateMenuCategory')
