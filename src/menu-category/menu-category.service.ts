@@ -6,11 +6,11 @@ import { AppError } from 'src/utils/errors/app-error';
 import type {
   ChangeMenuCategoryPositionRequest,
   CreateMenuCategoryRequest,
+  MenuCategory,
   MenuCategoryWithItems,
   StatusResponse,
   UpdateMenuCategoryRequest,
 } from 'src/generated-types/menu-category';
-import type { MenuCategory } from 'prisma/generated-types/client';
 import type { Language } from 'prisma/generated-types/enums';
 
 @Injectable()

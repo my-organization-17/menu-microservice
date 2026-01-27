@@ -6,6 +6,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { MenuCategoryModule } from './menu-category/menu-category.module';
 import { validateEnv } from './utils/validators/env-validator';
 import { EnvironmentVariables } from './utils/env.dto';
+import { MenuItemModule } from './menu-item/menu-item.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { EnvironmentVariables } from './utils/env.dto';
     HealthCheckModule,
     PrismaModule,
     MenuCategoryModule,
+    MenuItemModule,
   ],
   controllers: [],
   providers: [],

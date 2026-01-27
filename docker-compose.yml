@@ -13,6 +13,7 @@ services:
 
   menu-app:
     container_name: menu-app
+    image: menu-microservice:latest
     build:
       context: .
       dockerfile: Dockerfile
