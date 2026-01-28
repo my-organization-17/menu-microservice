@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AppError } from 'src/utils/errors/app-error';
 
-import type { MenuItem } from 'src/generated-types/menu-item';
+import type { MenuItem, MenuItemList } from 'src/generated-types/menu-item';
 
 @Injectable()
 export class MenuItemService {
@@ -30,14 +30,14 @@ export class MenuItemService {
     }
   }
 
-  async getMenuItemsByCategoryId(categoryId: string): Promise<MenuItem[]> {
+  async getMenuItemsByCategoryId(categoryId: string): Promise<MenuItemList> {
     this.logger.log(`Fetching menu items by category id: ${categoryId}`);
     try {
       const menuItems = await this.prisma.menuItem.findMany({
         where: { categoryId },
       });
 
-      return menuItems;
+      return { menuItems };
     } catch (error) {
       this.logger.error(
         `Failed to get menu items by category id: ${categoryId}`,
